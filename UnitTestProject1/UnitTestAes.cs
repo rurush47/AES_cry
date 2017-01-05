@@ -38,11 +38,28 @@ namespace UnitTestProject
 
             State originalState = new State(testData);
 
-            State state = new State(testData);
-            state = state.SubBytes();
-            state = state.SubBytesInv();
+            State testState = new State(testData);
+            testState = testState.SubBytes();
+            testState = testState.SubBytesInv();
 
-            Assert.AreEqual(originalState.ToString(), originalState.ToString());
+            Assert.AreEqual(testState.ToString(), originalState.ToString());
+        }
+
+        [TestMethod]
+        public void TestShiftRowsInverse()
+        {
+            byte[] testData = { 0xc7, 0x23, 0xc3, 0x18,
+                                0x96, 0x05, 0x07, 0x12,
+                                0xef, 0xaa, 0xfb, 0x43,
+                                0x4d, 0x33, 0x85, 0x45 };
+
+            State originalState = new State(testData);
+
+            State testState = new State(testData);
+            testState = testState.ShiftRows();
+            testState = testState.ShiftRowsInv();
+
+            Assert.AreEqual(testState.ToString(), originalState.ToString());
         }
 
         [TestMethod]
