@@ -276,5 +276,20 @@ namespace Aes
             }
             return (s);
         }
+
+        public string ToAsciiString()
+        {
+            string result = "";
+
+            for (int i = 0; i < buf.GetLength(1); i++)
+            {
+                for (int j = 0; j < buf.GetLength(0); j++)
+                {
+                    result += Convert.ToChar(buf[j, i]);
+                }
+            }
+
+            return result;
+        }
     }
 }
