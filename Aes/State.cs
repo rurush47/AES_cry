@@ -146,9 +146,17 @@ namespace Aes
 
         public State ShiftRowsInv()
         {
-            // TODO
+            State s = new State();
 
-            return (null);
+            for (int r = 0; r < Rows; r++)
+            {
+                for (int c = 0; c < Columns; c++)
+                {
+                    s.buf[r, c] = buf[r, (c + (Columns - r)) % 4];
+                    //Console.Out.WriteLine("state[" + r + "," + c + "]=" + s.buf[r, c]);
+                }
+            }
+            return (s);
         }
 
         public State MixColumnsInv()
