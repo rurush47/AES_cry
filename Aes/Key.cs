@@ -30,6 +30,7 @@ namespace Aes
         };
         private byte[,] _w;
         private int _size;
+        private int _numberOfRounds;
 
         public int Size
         {
@@ -47,8 +48,8 @@ namespace Aes
         {
             _size = b.Length;
             int nk = _size / 4;  // key length (in words): 4/6/8 for 128/192/256-bit keys
-            int nr = nk + 6;
-            _w = new byte[4, 4 * (nr + 1)];
+            _numberOfRounds = nk + 6;
+            _w = new byte[4, 4 * (_numberOfRounds + 1)];
             for (int i = 0; i < nk; i++)
             {
                 _w[0, i] = b[4 * i];
@@ -57,7 +58,7 @@ namespace Aes
                 _w[3, i] = b[4 * i + 3];
             }
 
-            for (int i = nk; i < (4 * (nr + 1)); i++)
+            for (int i = nk; i < (4 * (_numberOfRounds + 1)); i++)
             {
                 byte[] temp = new byte[4];
                 temp[0] = _w[0, i - 1];
@@ -113,6 +114,17 @@ namespace Aes
                 s += "\n";
             }
             return (s);
+        }
+
+        public static bool IsValid(byte[] key)
+        {
+            int length = key.Length;
+            return length == 16 || length == 24 || length == 32;
+        }
+
+        public int GetNumberOfRounds()
+        {
+            return _numberOfRounds;
         }
     }
 }
