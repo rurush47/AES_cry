@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -51,5 +52,14 @@ namespace Aes
             State inputState = new State(inputPlain);
             Console.Out.WriteLine("state:\n" + inputState.ToMatrixString());
         }
+
+        private void FormAes_Load(object sender, EventArgs e)
+        {
+            AllocConsole();
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
     }
 }
