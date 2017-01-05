@@ -225,9 +225,15 @@ namespace Aes
 
         public State MixColumnsInv()
         {
-            // TODO
-
-            return (null);
+            State s = new State();
+            for (int c = 0; c < Columns; c++)
+            {
+                s.buf[0, c] = (byte)(mul14[buf[0, c]] ^ mul11[buf[1, c]] ^ mul13[buf[2, c]] ^ mul09[buf[3, c]]);
+                s.buf[1, c] = (byte)(mul09[buf[0, c]] ^ mul14[buf[1, c]] ^ mul11[buf[2, c]] ^ mul13[buf[3, c]]);
+                s.buf[2, c] = (byte)(mul13[buf[0, c]] ^ mul09[buf[1, c]] ^ mul14[buf[2, c]] ^ mul11[buf[3, c]]);
+                s.buf[3, c] = (byte)(mul11[buf[0, c]] ^ mul13[buf[1, c]] ^ mul09[buf[2, c]] ^ mul14[buf[3, c]]);
+            }
+            return (s);
         }
 
         public State AddRoundKey(Key key, int round)
