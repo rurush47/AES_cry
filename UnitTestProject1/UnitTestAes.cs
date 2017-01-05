@@ -63,6 +63,30 @@ namespace UnitTestProject
         }
 
         [TestMethod]
+        public void TestAddRoundKeyInverse()
+        {
+            byte[] testData = { 0xc7, 0x23, 0xc3, 0x18,
+                                0x96, 0x05, 0x07, 0x12,
+                                0xef, 0xaa, 0xfb, 0x43,
+                                0x4d, 0x33, 0x85, 0x45 };
+
+            byte[] inputKey = { 0x11, 0x22, 0x33, 0x44,
+                                0x55, 0x66, 0x77, 0x88,
+                                0x99, 0x00, 0xaa, 0xbb,
+                                0xcc, 0xdd, 0xee, 0xff };
+
+            Key key = new Key(inputKey);
+
+            State originalState = new State(testData);
+
+            State testState = new State(testData);
+            testState = testState.AddRoundKey(key, 0);
+            testState = testState.AddRoundKey(key, 0);
+
+            Assert.AreEqual(testState.ToString(), originalState.ToString());
+        }
+
+        [TestMethod]
         public void TestShiftRows()
         {
             string s = "12345689abcdefgh";
