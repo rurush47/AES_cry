@@ -81,6 +81,7 @@ namespace UnitTestProject
             Console.Out.WriteLine("shift:\n" + start);
             Assert.AreEqual(start.ToString(), expectedState.ToString());
         }
+
         [TestMethod]
         public void TestMixColumns()
         {
@@ -100,6 +101,24 @@ namespace UnitTestProject
             Console.Out.WriteLine("mix:\n" + start);
             Assert.AreEqual(start.ToString(), expectedState.ToString());
         }
+
+        [TestMethod]
+        public void TestMixColumnsInverse()
+        {
+            byte[] testData = { 0xc7, 0x23, 0xc3, 0x18,
+                                0x96, 0x05, 0x07, 0x12,
+                                0xef, 0xaa, 0xfb, 0x43,
+                                0x4d, 0x33, 0x85, 0x45 };
+
+            State originalState = new State(testData);
+
+            State testState = new State(testData);
+            testState = testState.MixColumns();
+            testState = testState.MixColumnsInv();
+
+            Assert.AreEqual(testState.ToString(), originalState.ToString());
+        }
+
         [TestMethod]
         public void TestKeyExpansion()
         {
