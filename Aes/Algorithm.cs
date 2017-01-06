@@ -14,7 +14,7 @@ namespace Aes
             byte[] inputKey = StringToHex(keyString);
             byte[] inputPlain = AsciiToByte(messageString);
 
-            if (Key.IsValid(inputPlain))
+            if (Key.IsValid(inputKey))
             {
                 Key key = new Key(inputKey);
                 State initState = new State(inputPlain);
@@ -47,7 +47,7 @@ namespace Aes
             byte[] inputKey = StringToHex(keyString);
             byte[] inputPlain = StringToHex(cypher);
 
-            if (Key.IsValid(inputPlain))
+            if (Key.IsValid(inputKey))
             {
                 Key key = new Key(inputKey);
                 State initState = new State(inputPlain);
