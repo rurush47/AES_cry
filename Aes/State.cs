@@ -285,6 +285,7 @@ namespace Aes
             {
                 for (int j = 0; j < buf.GetLength(0); j++)
                 {
+                    if(buf[j, i] == 0x00) continue;
                     result += Convert.ToChar(buf[j, i]);
                 }
             }

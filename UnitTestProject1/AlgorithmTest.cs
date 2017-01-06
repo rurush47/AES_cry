@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Aes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -15,7 +16,7 @@ namespace UnitTestProject
 
             string expectedResult = "6A19566351E9F22CB4508563C59073A7";
 
-            string result = Algorithm.Encrypt(message, key);
+            string result = Algorithm.EncryptMessage(message, key);
 
             Assert.AreEqual(result, expectedResult);
         }
@@ -26,9 +27,9 @@ namespace UnitTestProject
             string cypher = "6A19566351E9F22CB4508563C59073A7";
             string key = "112233445566778899aabbccddeeff00";
 
-            string expectedResult = "3132333435373839616263646578797A";
+            string expectedResult = "12345789abcdexyz";
 
-            string result = Algorithm.Decrypt(cypher, key);
+            string result = Algorithm.DecryptMessage(cypher, key);
 
             Assert.AreEqual(result, expectedResult);
         }
@@ -36,12 +37,30 @@ namespace UnitTestProject
         [TestMethod]
         public void AlgorithmWorkTest()
         {
-            string message = "12345789abcdexyz";
+            string message = "12345789abcdexyza";
             string key = "112233445566778899aabbccddeeff00";
 
-            string result = Algorithm.Encrypt(message, key);
-            string decryptionResult = Algorithm.Decrypt(result, key);
+            string result = Algorithm.EncryptMessage(message, key);
+            string decryptionResult = Algorithm.DecryptMessage(result, key);
             Assert.AreEqual(message, decryptionResult);
+        }
+
+        [TestMethod]
+        public void SplitMessageTest()
+        {
+            string message = "12345789abcdexyzabc";
+            byte[] expectedResult =
+            {
+                0x61, 0x62, 0x63, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00
+            };
+
+            List<byte[]> bytes = Algorithm.SplitToBlocks(message);
+
+            Assert.AreEqual(bytes.Count, 2);
+            CollectionAssert.AreEqual(bytes[1], expectedResult);
         }
     }
 }

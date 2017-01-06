@@ -20,7 +20,7 @@ namespace Aes
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            Algorithm.EncryptBlock(tbPlain.Text, tbKey.Text);
+            Algorithm.EncryptMessage(tbPlain.Text, tbKey.Text);
         }
 
         private void FormAes_Load(object sender, EventArgs e)
