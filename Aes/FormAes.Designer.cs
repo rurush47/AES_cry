@@ -61,7 +61,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(151, 13);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Key (128/192/156 bit in HEX):";
+            this.label1.Text = "Key (128/192/256 bit in HEX):";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label4
@@ -101,7 +101,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(151, 13);
             this.label2.TabIndex = 16;
-            this.label2.Text = "Key (128/192/156 bit in HEX):";
+            this.label2.Text = "Key (128/192/256 bit in HEX):";
             // 
             // panel1
             // 
