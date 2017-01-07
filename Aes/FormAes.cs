@@ -20,16 +20,35 @@ namespace Aes
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            Algorithm.EncryptMessage(tbPlain.Text, tbKey.Text);
+            string result = Algorithm.EncryptMessage(tbPlain.Text, tbKey.Text);
+
+            if (result != null)
+            {
+                textBoxResultE.Text = result;
+            }
+            else
+            {
+                ShowMessage("Wrong key format or empty message!");
+            }
         }
 
-        private void FormAes_Load(object sender, EventArgs e)
+        private void ShowMessage(string message)
         {
-            AllocConsole();
+            MessageBox.Show(message);
         }
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
+        private void buttonDecrypt_Click(object sender, EventArgs e)
+        {
+            string result = Algorithm.DecryptMessage(textCypher.Text, textBoxDKey.Text);
+
+            if (result != null)
+            {
+                textBoxResultD.Text = result;
+            }
+            else
+            {
+                ShowMessage("Wrong key or cypher format!");
+            }
+        }
     }
 }
