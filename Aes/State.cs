@@ -292,5 +292,22 @@ namespace Aes
 
             return result;
         }
+
+        public byte[] ToBytesArray()
+        {
+            byte[] bytes = new byte[Rows*Columns];
+
+            int c = 0;
+            for (int i = 0; i < buf.GetLength(1); i++)
+            {
+                for (int j = 0; j < buf.GetLength(0); j++)
+                {
+                    bytes[c] = buf[i, j];
+                    c++;
+                }
+            }
+
+            return bytes;
+        }
     }
 }

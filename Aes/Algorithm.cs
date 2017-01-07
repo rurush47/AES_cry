@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net.Security;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +23,7 @@ namespace Aes
 
             foreach (var block in blocks)
             {
-                cypher += EncryptBlock(block, key);
+                cypher += EncryptBlock(block, key).ToString();
             }
 
             return cypher;
@@ -36,13 +40,37 @@ namespace Aes
 
             foreach (var block in blocks)
             {
-                message += DecryptBolock(block, key);
+                message += DecryptBlock(block, key).ToString();
             }
 
             return message;
         }
 
-        public static string EncryptBlock(byte[] inputPlain, Key key)
+        public static byte[] EncryptBytes(List<byte[]> blocks, Key key)
+        {
+            List<byte> result = new List<byte>();
+
+            foreach (var block in blocks)
+            {
+                result.AddRange(EncryptBlock(block, key).ToBytesArray());
+            }
+
+            return result.ToArray();
+        }
+
+        public static byte[] DecryptBytes(List<byte[]> blocks, Key key)
+        {
+            List<byte> result = new List<byte>();
+
+            foreach (var block in blocks)
+            {
+                result.AddRange(DecryptBlock(block, key).ToBytesArray());
+            }
+
+            return result.ToArray();
+        }
+
+        public static State EncryptBlock(byte[] inputPlain, Key key)
         {
                 State initState = new State(inputPlain);
 
@@ -62,10 +90,10 @@ namespace Aes
                 currentState = currentState.ShiftRows();
                 currentState = currentState.AddRoundKey(key, numberOfRounds);
 
-                return currentState.ToString();
+                return currentState;
         }
 
-        public static string DecryptBolock(byte[] inputPlain, Key key)
+        public static State DecryptBlock(byte[] inputPlain, Key key)
         {
                 State initState = new State(inputPlain);
 
@@ -86,7 +114,7 @@ namespace Aes
 
                 currentState = currentState.AddRoundKey(key, 0);
 
-                return currentState.ToAsciiString();
+                return currentState;
         }
 
         private static byte[] AsciiToByte(string s)
@@ -140,6 +168,32 @@ namespace Aes
             return blocks;
         }
 
+        public static List<byte[]> SplitToBlocks(byte[] byteArray)
+        {
+            List<byte[]> blocks = new List<byte[]>();
+
+            while (byteArray.Length != 0)
+            {
+                if (byteArray.Length >= 16)
+                {
+                    var block = byteArray.Take(16).ToArray();
+                    blocks.Add(block);
+                    byteArray = byteArray.Skip(16).ToArray();
+                }
+                else
+                {
+                    List<byte> bytes = byteArray.Take(byteArray.Length).ToList();
+                    for (int i = bytes.Count; i < 16; i++)
+                    {
+                        bytes.Add(0x00);
+                    }
+                    blocks.Add(bytes.ToArray());
+                    byteArray = new byte[0];
+                }
+            }
+
+            return blocks;
+        }
 
 
         public static bool IsKeyValid(string keyString)
@@ -155,6 +209,64 @@ namespace Aes
         public static bool IsKeyLengthValid(string keyString)
         {
             return keyString.Length == 32 || keyString.Length == 48 || keyString.Length == 64;
+        }
+
+        public static Bitmap EncryptBitmap(string bitmapPath, string keyString)
+        {
+            if (string.IsNullOrEmpty(bitmapPath) || !IsKeyValid(keyString)) return null;
+
+            Bitmap image = new Bitmap(bitmapPath);
+            Key key = new Key(StringToHex(keyString));
+            byte[] byteArray = BitmapToByteArray(image);
+
+            List<byte[]> blocks = SplitToBlocks(byteArray);
+
+            byte[] encryptedPixels = EncryptBytes(blocks, key);
+
+            ApplyBytesToBitmap(image, encryptedPixels);
+
+            return image;
+        }
+
+        public static byte[] BitmapToByteArray(Bitmap bitmap)
+        {
+            BitmapData bmpdata = null;
+
+            try
+            {
+                bmpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+                int numbytes = bmpdata.Stride * bitmap.Height;
+                byte[] bytedata = new byte[numbytes];
+                IntPtr ptr = bmpdata.Scan0;
+
+                Marshal.Copy(ptr, bytedata, 0, numbytes);
+
+                return bytedata;
+            }
+            finally
+            {
+                if (bmpdata != null)
+                    bitmap.UnlockBits(bmpdata);
+            }
+        }
+
+        public static void ApplyBytesToBitmap(Bitmap bitmap, byte[] bytes)
+        {
+            BitmapData bmpdata = null;
+
+            try
+            {
+                bmpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
+                int numbytes = bmpdata.Stride * bitmap.Height;
+                IntPtr ptr = bmpdata.Scan0;
+
+                Marshal.Copy(bytes, 0, ptr, numbytes);
+            }
+            finally
+            {
+                if (bmpdata != null)
+                    bitmap.UnlockBits(bmpdata);
+            }
         }
     }
 }

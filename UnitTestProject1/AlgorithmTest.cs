@@ -62,5 +62,23 @@ namespace UnitTestProject
             Assert.AreEqual(bytes.Count, 2);
             CollectionAssert.AreEqual(bytes[1], expectedResult);
         }
+
+        [TestMethod]
+        public void SplitByteArrayTest()
+        {
+            byte[] initData =
+            {
+                0x61, 0x62, 0x63, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x22
+            };
+
+            List<byte[]> blocks = Algorithm.SplitToBlocks(initData);
+
+            Assert.AreEqual(blocks.Count, 2);
+            Assert.AreEqual(blocks[1][0], 0x22);
+        }
     }
 }
