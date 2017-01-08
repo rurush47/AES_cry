@@ -35,13 +35,44 @@ namespace UnitTestProject
             Assert.AreEqual(result, expectedResult);
         }
 
+
+        // Expected Ciphertexts from http://aes.online-domain-tools.com/
+
         [TestMethod]
         public void AlgorithmWorkTest()
         {
-            string message = "12345789abcdexyza";
-            string key = "112233445566778899aabbccddeeff00";
+            string message = "123456789abcdexyza";
+            string key = "00112233445566778899aabbccddeeff";
+            string expectedCiphertext = "05c2d3ebcb277c1c3d3f20fc232ba0982dc7b7e0efd53fa5aaf863220cfbd260".ToUpper();
 
             string result = Algorithm.EncryptMessage(message, key);
+            Assert.AreEqual(expectedCiphertext, result);
+            string decryptionResult = Algorithm.DecryptMessage(result, key);
+            Assert.AreEqual(message, decryptionResult);
+        }
+
+        [TestMethod]
+        public void KeyOf192BitsWorkTest()
+        {
+            string message = "123456789abcdexyza";
+            string key = "00112233445566778899aabbccddeeff0011223344556677";
+            string expectedCiphertext = "ccad5c2cee752982963287c8ab637d846c63d1102d406d9a03ec99f9d24b04af".ToUpper();
+
+            string result = Algorithm.EncryptMessage(message, key);
+            Assert.AreEqual(expectedCiphertext, result);
+            string decryptionResult = Algorithm.DecryptMessage(result, key);
+            Assert.AreEqual(message, decryptionResult);
+        }
+
+        [TestMethod]
+        public void KeyOf256BitsWorkTest()
+        {
+            string message = "123456789abcdexyza";
+            string key = "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff";
+            string expectedCiphertext = "122a44da6227e3a012831f7214e2d916a2f153b1c828baaa40952d7705b90da4".ToUpper();
+
+            string result = Algorithm.EncryptMessage(message, key);
+            Assert.AreEqual(expectedCiphertext, result);
             string decryptionResult = Algorithm.DecryptMessage(result, key);
             Assert.AreEqual(message, decryptionResult);
         }
