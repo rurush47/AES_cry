@@ -215,7 +215,7 @@ namespace Aes
             return keyString.Length == 32 || keyString.Length == 48 || keyString.Length == 64;
         }
 
-        public static Bitmap EncryptBitmap(string bitmapPath, string keyString)
+        public static Bitmap ProcessBitmap(string bitmapPath, string keyString, bool decrypt = false)
         {
             if (string.IsNullOrEmpty(bitmapPath) || !IsKeyValid(keyString)) return null;
 
@@ -225,8 +225,9 @@ namespace Aes
 
             List<byte[]> blocks = SplitToBlocks(byteArray);
 
-            byte[] encryptedPixels = EncryptBytes(blocks, key);
-            ApplyBytesToBitmap(image, encryptedPixels);
+            var processedPixels = decrypt ? DecryptBytes(blocks, key) : EncryptBytes(blocks, key);
+
+            ApplyBytesToBitmap(image, processedPixels);
 
             return image;
         }

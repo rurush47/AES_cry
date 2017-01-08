@@ -50,6 +50,9 @@
             this.pictureBoxResult = new System.Windows.Forms.PictureBox();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.buttonBitmap = new System.Windows.Forms.Button();
+            this.labelSource = new System.Windows.Forms.Label();
+            this.labelResult = new System.Windows.Forms.Label();
+            this.buttonSave = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -200,6 +203,9 @@
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.buttonSave);
+            this.panel3.Controls.Add(this.labelResult);
+            this.panel3.Controls.Add(this.labelSource);
             this.panel3.Controls.Add(this.textBoxKeyBitmap);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.buttonBitmapDecrypt);
@@ -209,7 +215,7 @@
             this.panel3.Controls.Add(this.buttonBitmap);
             this.panel3.Location = new System.Drawing.Point(13, 275);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(924, 394);
+            this.panel3.Size = new System.Drawing.Size(924, 202);
             this.panel3.TabIndex = 19;
             // 
             // textBoxKeyBitmap
@@ -231,7 +237,7 @@
             // 
             // buttonBitmapDecrypt
             // 
-            this.buttonBitmapDecrypt.Location = new System.Drawing.Point(3, 140);
+            this.buttonBitmapDecrypt.Location = new System.Drawing.Point(3, 122);
             this.buttonBitmapDecrypt.Name = "buttonBitmapDecrypt";
             this.buttonBitmapDecrypt.Size = new System.Drawing.Size(75, 23);
             this.buttonBitmapDecrypt.TabIndex = 4;
@@ -241,7 +247,7 @@
             // 
             // buttonEncryptBitmap
             // 
-            this.buttonEncryptBitmap.Location = new System.Drawing.Point(3, 90);
+            this.buttonEncryptBitmap.Location = new System.Drawing.Point(3, 93);
             this.buttonEncryptBitmap.Name = "buttonEncryptBitmap";
             this.buttonEncryptBitmap.Size = new System.Drawing.Size(75, 23);
             this.buttonEncryptBitmap.TabIndex = 3;
@@ -252,7 +258,7 @@
             // pictureBoxResult
             // 
             this.pictureBoxResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxResult.Location = new System.Drawing.Point(293, 38);
+            this.pictureBoxResult.Location = new System.Drawing.Point(293, 64);
             this.pictureBoxResult.Name = "pictureBoxResult";
             this.pictureBoxResult.Size = new System.Drawing.Size(125, 125);
             this.pictureBoxResult.TabIndex = 2;
@@ -261,7 +267,7 @@
             // pictureBox
             // 
             this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox.Location = new System.Drawing.Point(162, 38);
+            this.pictureBox.Location = new System.Drawing.Point(162, 64);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(125, 125);
             this.pictureBox.TabIndex = 1;
@@ -269,7 +275,7 @@
             // 
             // buttonBitmap
             // 
-            this.buttonBitmap.Location = new System.Drawing.Point(3, 38);
+            this.buttonBitmap.Location = new System.Drawing.Point(3, 64);
             this.buttonBitmap.Name = "buttonBitmap";
             this.buttonBitmap.Size = new System.Drawing.Size(75, 23);
             this.buttonBitmap.TabIndex = 0;
@@ -277,11 +283,39 @@
             this.buttonBitmap.UseVisualStyleBackColor = true;
             this.buttonBitmap.Click += new System.EventHandler(this.buttonBitmap_Click);
             // 
+            // labelSource
+            // 
+            this.labelSource.AutoSize = true;
+            this.labelSource.Location = new System.Drawing.Point(163, 38);
+            this.labelSource.Name = "labelSource";
+            this.labelSource.Size = new System.Drawing.Size(44, 13);
+            this.labelSource.TabIndex = 20;
+            this.labelSource.Text = "Source:";
+            // 
+            // labelResult
+            // 
+            this.labelResult.AutoSize = true;
+            this.labelResult.Location = new System.Drawing.Point(293, 38);
+            this.labelResult.Name = "labelResult";
+            this.labelResult.Size = new System.Drawing.Size(40, 13);
+            this.labelResult.TabIndex = 21;
+            this.labelResult.Text = "Result:";
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(3, 152);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(75, 23);
+            this.buttonSave.TabIndex = 22;
+            this.buttonSave.Text = "Save result";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
             // FormAes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(952, 681);
+            this.ClientSize = new System.Drawing.Size(952, 481);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -323,6 +357,9 @@
         private System.Windows.Forms.Button buttonBitmapDecrypt;
         private System.Windows.Forms.TextBox textBoxKeyBitmap;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Label labelResult;
+        private System.Windows.Forms.Label labelSource;
     }
 }
 

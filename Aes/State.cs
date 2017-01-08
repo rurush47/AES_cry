@@ -302,7 +302,7 @@ namespace Aes
             {
                 for (int j = 0; j < buf.GetLength(0); j++)
                 {
-                    bytes[c] = buf[i, j];
+                    bytes[c] = buf[j, i];
                     c++;
                 }
             }

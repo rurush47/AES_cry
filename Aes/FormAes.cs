@@ -70,27 +70,54 @@ namespace Aes
                     pictureBox.Image = new Bitmap(dlg.FileName);
                     pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
                 }
+                else
+                {
+                    ShowMessage("Opening bitmap failed!");
+                }
             }
         }
 
         private void buttonBitmapDecrypt_Click(object sender, EventArgs e)
         {
-
+            Bitmap img = Algorithm.ProcessBitmap(_bitmapPath, textBoxDKey.Text, true);
+            ShowResultPicture(img);
         }
 
         private void buttonEncryptBitmap_Click(object sender, EventArgs e)
         {
-            Bitmap img = Algorithm.EncryptBitmap(_bitmapPath, textBoxDKey.Text);
+            Bitmap img = Algorithm.ProcessBitmap(_bitmapPath, textBoxDKey.Text);
+            ShowResultPicture(img);
+        }
+
+        private void ShowResultPicture(Image img)
+        {
             if (img != null)
             {
                 pictureBoxResult.Image = img;
                 pictureBoxResult.SizeMode = PictureBoxSizeMode.StretchImage;
+            }
+            else
+            {
+                ShowMessage("Bad key or bitmap load failed!");
+            }
+        }
 
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            
+            Image img = pictureBoxResult.Image;
+
+            if (img != null)
+            {
                 SaveFileDialog dialog = new SaveFileDialog();
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     img.Save(dialog.FileName, ImageFormat.Bmp);
                 }
+            }
+            else
+            {
+                ShowMessage("There's no result image yet!");
             }
         }
     }
