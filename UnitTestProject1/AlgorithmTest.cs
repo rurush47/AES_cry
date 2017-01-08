@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Aes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 
 namespace UnitTestProject
 {
@@ -68,17 +69,20 @@ namespace UnitTestProject
         {
             byte[] initData =
             {
-                0x61, 0x62, 0x63, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
+                0x61, 0x62, 0x63, 0x64,
+                0x61, 0x62, 0x63, 0x64,
+                0x61, 0x62, 0x63, 0x64,
+                0x61, 0x62, 0x63, 0x64,
                 0x22
             };
 
-            List<byte[]> blocks = Algorithm.SplitToBlocks(initData);
+            
 
+            List<byte[]> blocks = Algorithm.SplitBytesToBlocks(initData);
+            
             Assert.AreEqual(blocks.Count, 2);
             Assert.AreEqual(blocks[1][0], 0x22);
+            Assert.AreEqual(blocks[1][1], 0x00);
         }
     }
 }

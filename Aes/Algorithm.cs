@@ -168,7 +168,7 @@ namespace Aes
             return blocks;
         }
 
-        public static List<byte[]> SplitToBlocks(byte[] byteArray)
+        public static List<byte[]> SplitBytesToBlocks(byte[] byteArray)
         {
             List<byte[]> blocks = new List<byte[]>();
             int arraySize = byteArray.Length;
@@ -176,24 +176,11 @@ namespace Aes
 
             while (counter < arraySize)
             {
-                if (arraySize - counter >= 16)
-                {
-                    byte[] block = new byte[16];
-                    Array.Copy(byteArray, counter, block, 0, 16);
-                    blocks.Add(block);
-                    counter += 16;
-                }
-                else
-                {
-                    List<byte> bytes = byteArray.Take(arraySize - counter).ToList();
-                    for (int i = bytes.Count; i < 16; i++)
-                    {
-                        bytes.Add(0x00);
-                    }
-                    blocks.Add(bytes.ToArray());
-                    byteArray = new byte[0];
-                    counter += 16;
-                }
+                byte[] block = new byte[16];
+                int toCopy = Math.Min(arraySize - counter, 16);
+                Array.Copy(byteArray, counter, block, 0, toCopy);
+                blocks.Add(block);
+                counter += 16;
             }
 
             return blocks;
@@ -223,7 +210,7 @@ namespace Aes
             Key key = new Key(StringToHex(keyString));
             byte[] byteArray = BitmapToByteArray(image);
 
-            List<byte[]> blocks = SplitToBlocks(byteArray);
+            List<byte[]> blocks = SplitBytesToBlocks(byteArray);
 
             var processedPixels = decrypt ? DecryptBytes(blocks, key) : EncryptBytes(blocks, key);
 
