@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -19,14 +20,10 @@ namespace Aes
 
             Key key = new Key(StringToHex(keyString));
             List<byte[]> blocks = SplitToBlocks(message);
-            string cypher = "";
 
-            foreach (var block in blocks)
-            {
-                cypher += EncryptBlock(block, key).ToString();
-            }
-
-            return cypher;
+            return EncryptBlocks(blocks, key)
+                    .Select<State,string>(b => b.ToString())
+                    .Aggregate(String.Concat);
         }
 
         public static string DecryptMessage(string cypher, string keyString)
@@ -36,44 +33,56 @@ namespace Aes
 
             Key key = new Key(StringToHex(keyString));
             List<byte[]> blocks = SplitToBlocks(cypher, true);
-            string message = "";
 
-            foreach (var block in blocks)
-            {
-                message += DecryptBlock(block, key).ToAsciiString();
-            }
-
-            return message;
+            return DecryptBlocks(blocks, key)
+                    .Select<State, string>(b => b.ToAsciiString())
+                    .Aggregate(String.Concat);
         }
 
         public static byte[] EncryptBytes(List<byte[]> blocks, Key key)
         {
-            List<byte> result = new List<byte>();
-
-            foreach (var block in blocks)
-            {
-                result.AddRange(EncryptBlock(block, key).ToBytesArray());
-            }
-
-            return result.ToArray();
+            IEnumerable<byte[]> encryptedBlocks = EncryptBlocks(blocks, key)
+                                                    .Select<State,byte[]>(b => b.ToBytesArray());
+            return FlattenToArray(encryptedBlocks);
         }
 
         public static byte[] DecryptBytes(List<byte[]> blocks, Key key)
         {
-            List<byte> result = new List<byte>();
-
-            foreach (var block in blocks)
-            {
-                result.AddRange(DecryptBlock(block, key).ToBytesArray());
-            }
-
-            return result.ToArray();
+            IEnumerable<byte[]> decryptedBlocks = DecryptBlocks(blocks, key)
+                                                    .Select<State, byte[]>(b => b.ToBytesArray());
+            return FlattenToArray(decryptedBlocks);
         }
+
+        private static T[] FlattenToArray<T>(IEnumerable<IEnumerable<T>> enumerable)
+        {
+            return enumerable
+                    .SelectMany(b => b)
+                    .ToArray();
+        }
+
+        // ============= Blocks Enc / Dec =============
+
+        public static List<State> EncryptBlocks(List<byte[]> blocks, Key key)
+        {
+            return blocks.Select(b => EncryptBlock(b, key)).ToList();
+        }
+
+        public static List<State> DecryptBlocks(List<byte[]> blocks, Key key)
+        {
+            return blocks.Select(b => DecryptBlock(b, key)).ToList();
+        }
+
+
+        // ============== Single Block Encryption / Decryption =================
 
         public static State EncryptBlock(byte[] inputPlain, Key key)
         {
-                State initState = new State(inputPlain);
+            State initState = new State(inputPlain);
+            return EncryptBlock(initState, key);
+        }
 
+        private static State EncryptBlock(State initState, Key key)
+        {
                 int numberOfRounds = key.GetNumberOfRounds();
 
                 State currentState = initState.AddRoundKey(key, 0);
@@ -95,9 +104,13 @@ namespace Aes
 
         public static State DecryptBlock(byte[] inputPlain, Key key)
         {
-                State initState = new State(inputPlain);
+            State initState = new State(inputPlain);
+            return DecryptBlock(initState, key);
+        }
 
-                int numberOfRounds = key.GetNumberOfRounds();
+        private static State DecryptBlock(State initState, Key key)
+        {
+            int numberOfRounds = key.GetNumberOfRounds();
 
                 State currentState = initState.AddRoundKey(key, numberOfRounds);
                 currentState = currentState.ShiftRowsInv();
@@ -186,6 +199,11 @@ namespace Aes
             return blocks;
         }
 
+
+        public static bool IsIvValid(string ivString)
+        {
+            return OnlyHexInString(ivString) && ivString.Length == 32; // 16 bytes -> one block size
+        }
 
         public static bool IsKeyValid(string keyString)
         {

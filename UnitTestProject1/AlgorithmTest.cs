@@ -107,8 +107,6 @@ namespace UnitTestProject
                 0x22
             };
 
-            
-
             List<byte[]> blocks = Algorithm.SplitBytesToBlocks(initData);
             
             Assert.AreEqual(blocks.Count, 2);
