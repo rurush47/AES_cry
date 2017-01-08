@@ -309,5 +309,16 @@ namespace Aes
 
             return bytes;
         }
+
+        public void Xor(State other)
+        {
+            for(int i = 0; i < buf.GetLength(0); i++)
+            {
+                for(int j = 0; j < buf.GetLength(1); j++)
+                {
+                    buf[j, i] ^= other.buf[j, i];
+                }
+            }
+        }
     }
 }
