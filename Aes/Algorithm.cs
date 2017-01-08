@@ -40,7 +40,7 @@ namespace Aes
 
             foreach (var block in blocks)
             {
-                message += DecryptBlock(block, key).ToString();
+                message += DecryptBlock(block, key).ToAsciiString();
             }
 
             return message;
