@@ -46,9 +46,23 @@ namespace Aes
             return FlattenToArray(encryptedBlocks);
         }
 
+        public static byte[] EncryptBytesCFB(List<byte[]> blocks, byte[] iv, Key key)
+        {
+            IEnumerable<byte[]> encryptedBlocks = EncryptBlocksCFB(blocks, iv, key)
+                                                    .Select<State, byte[]>(b => b.ToBytesArray());
+            return FlattenToArray(encryptedBlocks);
+        }
+
         public static byte[] DecryptBytes(List<byte[]> blocks, Key key)
         {
             IEnumerable<byte[]> decryptedBlocks = DecryptBlocks(blocks, key)
+                                                    .Select<State, byte[]>(b => b.ToBytesArray());
+            return FlattenToArray(decryptedBlocks);
+        }
+
+        public static byte[] DecryptBytesCFB(List<byte[]> blocks, byte[] iv, Key key)
+        {
+            IEnumerable<byte[]> decryptedBlocks = DecryptBlocksCFB(blocks, iv, key)
                                                     .Select<State, byte[]>(b => b.ToBytesArray());
             return FlattenToArray(decryptedBlocks);
         }
@@ -308,6 +322,26 @@ namespace Aes
 
             return image;
         }
+
+        public static Bitmap ProcessBitmapCFB(string bitmapPath, string keyString, string ivString, bool decrypt = false)
+        {
+            if (string.IsNullOrEmpty(bitmapPath) || !IsKeyValid(keyString)
+                || !IsIvValid(ivString)) return null;
+
+            Bitmap image = new Bitmap(bitmapPath);
+            Key key = new Key(StringToHex(keyString));
+            byte[] byteArray = BitmapToByteArray(image);
+            byte[] iv = StringToHex(ivString);
+            List<byte[]> blocks = SplitBytesToBlocks(byteArray);
+
+            var processedPixels = decrypt ? DecryptBytesCFB(blocks, iv, key) : EncryptBytesCFB(blocks, iv, key);
+
+            ApplyBytesToBitmap(image, processedPixels);
+
+            return image;
+        }
+
+
 
         public static byte[] BitmapToByteArray(Bitmap bitmap)
         {

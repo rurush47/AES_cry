@@ -98,7 +98,8 @@ namespace Aes
             }
             else
             {
-                ShowMessage("Bad key or bitmap load failed!");
+                ShowMessage("Bad key or bitmap load failed!" +
+                            " If using CFB IV also can be provided incorrect!");
             }
         }
 
@@ -119,6 +120,18 @@ namespace Aes
             {
                 ShowMessage("There's no result image yet!");
             }
+        }
+
+        private void buttonEncryptCFB_Click(object sender, EventArgs e)
+        {
+            Bitmap img = Algorithm.ProcessBitmapCFB(_bitmapPath, textBoxIV.Text, textBoxDKey.Text);
+            ShowResultPicture(img);
+        }
+
+        private void buttonDecryptCFB_Click(object sender, EventArgs e)
+        {
+            Bitmap img = Algorithm.ProcessBitmapCFB(_bitmapPath, textBoxIV.Text, textBoxDKey.Text, true);
+            ShowResultPicture(img);
         }
     }
 }

@@ -43,6 +43,9 @@
             this.buttonDecrypt = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.buttonSave = new System.Windows.Forms.Button();
+            this.labelResult = new System.Windows.Forms.Label();
+            this.labelSource = new System.Windows.Forms.Label();
             this.textBoxKeyBitmap = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.buttonBitmapDecrypt = new System.Windows.Forms.Button();
@@ -50,9 +53,10 @@
             this.pictureBoxResult = new System.Windows.Forms.PictureBox();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.buttonBitmap = new System.Windows.Forms.Button();
-            this.labelSource = new System.Windows.Forms.Label();
-            this.labelResult = new System.Windows.Forms.Label();
-            this.buttonSave = new System.Windows.Forms.Button();
+            this.textBoxIV = new System.Windows.Forms.TextBox();
+            this.buttonEncryptCFB = new System.Windows.Forms.Button();
+            this.buttonDecryptCFB = new System.Windows.Forms.Button();
+            this.labelIV = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -203,6 +207,10 @@
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.labelIV);
+            this.panel3.Controls.Add(this.buttonDecryptCFB);
+            this.panel3.Controls.Add(this.buttonEncryptCFB);
+            this.panel3.Controls.Add(this.textBoxIV);
             this.panel3.Controls.Add(this.buttonSave);
             this.panel3.Controls.Add(this.labelResult);
             this.panel3.Controls.Add(this.labelSource);
@@ -217,6 +225,34 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(924, 202);
             this.panel3.TabIndex = 19;
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(3, 152);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(75, 23);
+            this.buttonSave.TabIndex = 22;
+            this.buttonSave.Text = "Save result";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // labelResult
+            // 
+            this.labelResult.AutoSize = true;
+            this.labelResult.Location = new System.Drawing.Point(293, 38);
+            this.labelResult.Name = "labelResult";
+            this.labelResult.Size = new System.Drawing.Size(40, 13);
+            this.labelResult.TabIndex = 21;
+            this.labelResult.Text = "Result:";
+            // 
+            // labelSource
+            // 
+            this.labelSource.AutoSize = true;
+            this.labelSource.Location = new System.Drawing.Point(163, 38);
+            this.labelSource.Name = "labelSource";
+            this.labelSource.Size = new System.Drawing.Size(44, 13);
+            this.labelSource.TabIndex = 20;
+            this.labelSource.Text = "Source:";
             // 
             // textBoxKeyBitmap
             // 
@@ -283,33 +319,41 @@
             this.buttonBitmap.UseVisualStyleBackColor = true;
             this.buttonBitmap.Click += new System.EventHandler(this.buttonBitmap_Click);
             // 
-            // labelSource
+            // textBoxIV
             // 
-            this.labelSource.AutoSize = true;
-            this.labelSource.Location = new System.Drawing.Point(163, 38);
-            this.labelSource.Name = "labelSource";
-            this.labelSource.Size = new System.Drawing.Size(44, 13);
-            this.labelSource.TabIndex = 20;
-            this.labelSource.Text = "Source:";
+            this.textBoxIV.Location = new System.Drawing.Point(468, 64);
+            this.textBoxIV.Name = "textBoxIV";
+            this.textBoxIV.Size = new System.Drawing.Size(450, 20);
+            this.textBoxIV.TabIndex = 23;
             // 
-            // labelResult
+            // buttonEncryptCFB
             // 
-            this.labelResult.AutoSize = true;
-            this.labelResult.Location = new System.Drawing.Point(293, 38);
-            this.labelResult.Name = "labelResult";
-            this.labelResult.Size = new System.Drawing.Size(40, 13);
-            this.labelResult.TabIndex = 21;
-            this.labelResult.Text = "Result:";
+            this.buttonEncryptCFB.Location = new System.Drawing.Point(468, 93);
+            this.buttonEncryptCFB.Name = "buttonEncryptCFB";
+            this.buttonEncryptCFB.Size = new System.Drawing.Size(75, 23);
+            this.buttonEncryptCFB.TabIndex = 24;
+            this.buttonEncryptCFB.Text = "Encrypt CFB";
+            this.buttonEncryptCFB.UseVisualStyleBackColor = true;
+            this.buttonEncryptCFB.Click += new System.EventHandler(this.buttonEncryptCFB_Click);
             // 
-            // buttonSave
+            // buttonDecryptCFB
             // 
-            this.buttonSave.Location = new System.Drawing.Point(3, 152);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(75, 23);
-            this.buttonSave.TabIndex = 22;
-            this.buttonSave.Text = "Save result";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonDecryptCFB.Location = new System.Drawing.Point(468, 122);
+            this.buttonDecryptCFB.Name = "buttonDecryptCFB";
+            this.buttonDecryptCFB.Size = new System.Drawing.Size(75, 23);
+            this.buttonDecryptCFB.TabIndex = 25;
+            this.buttonDecryptCFB.Text = "Decrypt CFB";
+            this.buttonDecryptCFB.UseVisualStyleBackColor = true;
+            this.buttonDecryptCFB.Click += new System.EventHandler(this.buttonDecryptCFB_Click);
+            // 
+            // labelIV
+            // 
+            this.labelIV.AutoSize = true;
+            this.labelIV.Location = new System.Drawing.Point(465, 38);
+            this.labelIV.Name = "labelIV";
+            this.labelIV.Size = new System.Drawing.Size(20, 13);
+            this.labelIV.TabIndex = 26;
+            this.labelIV.Text = "IV:";
             // 
             // FormAes
             // 
@@ -360,6 +404,10 @@
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Label labelResult;
         private System.Windows.Forms.Label labelSource;
+        private System.Windows.Forms.Label labelIV;
+        private System.Windows.Forms.Button buttonDecryptCFB;
+        private System.Windows.Forms.Button buttonEncryptCFB;
+        private System.Windows.Forms.TextBox textBoxIV;
     }
 }
 
