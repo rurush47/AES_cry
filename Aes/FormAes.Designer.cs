@@ -43,6 +43,10 @@
             this.buttonDecrypt = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.labelIV = new System.Windows.Forms.Label();
+            this.buttonDecryptCFB = new System.Windows.Forms.Button();
+            this.buttonEncryptCFB = new System.Windows.Forms.Button();
+            this.textBoxIV = new System.Windows.Forms.TextBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.labelResult = new System.Windows.Forms.Label();
             this.labelSource = new System.Windows.Forms.Label();
@@ -53,10 +57,6 @@
             this.pictureBoxResult = new System.Windows.Forms.PictureBox();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.buttonBitmap = new System.Windows.Forms.Button();
-            this.textBoxIV = new System.Windows.Forms.TextBox();
-            this.buttonEncryptCFB = new System.Windows.Forms.Button();
-            this.buttonDecryptCFB = new System.Windows.Forms.Button();
-            this.labelIV = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -226,6 +226,43 @@
             this.panel3.Size = new System.Drawing.Size(924, 202);
             this.panel3.TabIndex = 19;
             // 
+            // labelIV
+            // 
+            this.labelIV.AutoSize = true;
+            this.labelIV.Location = new System.Drawing.Point(465, 38);
+            this.labelIV.Name = "labelIV";
+            this.labelIV.Size = new System.Drawing.Size(20, 13);
+            this.labelIV.TabIndex = 26;
+            this.labelIV.Text = "IV:";
+            // 
+            // buttonDecryptCFB
+            // 
+            this.buttonDecryptCFB.Location = new System.Drawing.Point(468, 122);
+            this.buttonDecryptCFB.Name = "buttonDecryptCFB";
+            this.buttonDecryptCFB.Size = new System.Drawing.Size(75, 23);
+            this.buttonDecryptCFB.TabIndex = 25;
+            this.buttonDecryptCFB.Text = "Decrypt CFB";
+            this.buttonDecryptCFB.UseVisualStyleBackColor = true;
+            this.buttonDecryptCFB.Click += new System.EventHandler(this.buttonDecryptCFB_Click);
+            // 
+            // buttonEncryptCFB
+            // 
+            this.buttonEncryptCFB.Location = new System.Drawing.Point(468, 93);
+            this.buttonEncryptCFB.Name = "buttonEncryptCFB";
+            this.buttonEncryptCFB.Size = new System.Drawing.Size(75, 23);
+            this.buttonEncryptCFB.TabIndex = 24;
+            this.buttonEncryptCFB.Text = "Encrypt CFB";
+            this.buttonEncryptCFB.UseVisualStyleBackColor = true;
+            this.buttonEncryptCFB.Click += new System.EventHandler(this.buttonEncryptCFB_Click);
+            // 
+            // textBoxIV
+            // 
+            this.textBoxIV.Location = new System.Drawing.Point(468, 64);
+            this.textBoxIV.Name = "textBoxIV";
+            this.textBoxIV.Size = new System.Drawing.Size(450, 20);
+            this.textBoxIV.TabIndex = 23;
+            this.textBoxIV.Text = "0123456789abcdef0123456789abcdef";
+            // 
             // buttonSave
             // 
             this.buttonSave.Location = new System.Drawing.Point(3, 152);
@@ -318,42 +355,6 @@
             this.buttonBitmap.Text = "Open bitmap";
             this.buttonBitmap.UseVisualStyleBackColor = true;
             this.buttonBitmap.Click += new System.EventHandler(this.buttonBitmap_Click);
-            // 
-            // textBoxIV
-            // 
-            this.textBoxIV.Location = new System.Drawing.Point(468, 64);
-            this.textBoxIV.Name = "textBoxIV";
-            this.textBoxIV.Size = new System.Drawing.Size(450, 20);
-            this.textBoxIV.TabIndex = 23;
-            // 
-            // buttonEncryptCFB
-            // 
-            this.buttonEncryptCFB.Location = new System.Drawing.Point(468, 93);
-            this.buttonEncryptCFB.Name = "buttonEncryptCFB";
-            this.buttonEncryptCFB.Size = new System.Drawing.Size(75, 23);
-            this.buttonEncryptCFB.TabIndex = 24;
-            this.buttonEncryptCFB.Text = "Encrypt CFB";
-            this.buttonEncryptCFB.UseVisualStyleBackColor = true;
-            this.buttonEncryptCFB.Click += new System.EventHandler(this.buttonEncryptCFB_Click);
-            // 
-            // buttonDecryptCFB
-            // 
-            this.buttonDecryptCFB.Location = new System.Drawing.Point(468, 122);
-            this.buttonDecryptCFB.Name = "buttonDecryptCFB";
-            this.buttonDecryptCFB.Size = new System.Drawing.Size(75, 23);
-            this.buttonDecryptCFB.TabIndex = 25;
-            this.buttonDecryptCFB.Text = "Decrypt CFB";
-            this.buttonDecryptCFB.UseVisualStyleBackColor = true;
-            this.buttonDecryptCFB.Click += new System.EventHandler(this.buttonDecryptCFB_Click);
-            // 
-            // labelIV
-            // 
-            this.labelIV.AutoSize = true;
-            this.labelIV.Location = new System.Drawing.Point(465, 38);
-            this.labelIV.Name = "labelIV";
-            this.labelIV.Size = new System.Drawing.Size(20, 13);
-            this.labelIV.TabIndex = 26;
-            this.labelIV.Text = "IV:";
             // 
             // FormAes
             // 
