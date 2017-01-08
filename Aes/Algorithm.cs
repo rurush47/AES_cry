@@ -60,7 +60,80 @@ namespace Aes
                     .ToArray();
         }
 
+
+        // ============= CFB encryption / decryption =========
+
+        public static string EncryptMessageCFB(string message, string ivString, string keyString)
+        {
+            if (string.IsNullOrEmpty(message) || !IsKeyValid(keyString)
+                || !IsIvValid(ivString)) return null;
+
+            Key key = new Key(StringToHex(keyString));
+            byte[] iv = StringToHex(ivString);
+            List<byte[]> blocks = SplitToBlocks(message);
+
+            return EncryptBlocksCFB(blocks, iv, key)
+                    .Select<State, string>(b => b.ToString())
+                    .Aggregate(String.Concat);
+        }
+
+        public static string DecryptMessageCFB(string cypher, string ivString, string keyString)
+        {
+            if (string.IsNullOrEmpty(cypher) || !IsKeyValid(keyString)
+                || !OnlyHexInString(cypher) || !IsIvValid(ivString)) return null;
+
+            Key key = new Key(StringToHex(keyString));
+            byte[] iv = StringToHex(ivString);
+            List<byte[]> blocks = SplitToBlocks(cypher, true);
+
+            return DecryptBlocksCFB(blocks, iv, key)
+                    .Select<State, string>(b => b.ToAsciiString())
+                    .Aggregate(String.Concat);
+        }
+
+
         // ============= Blocks Enc / Dec =============
+
+        public static List<State> EncryptBlocksCFB(List<byte[]> blocks, byte[] iv, Key key)
+        {
+            // CFB encryption is sequential
+            List<State> result = new List<State>();
+            State ciphertext = new State(iv);
+
+            foreach (var block in blocks)
+            {
+                State plaintext = new State(block);
+                ciphertext = EncryptBlock(ciphertext, key);
+                ciphertext.Xor(plaintext);
+                result.Add(ciphertext);
+            }
+
+            return result;
+        }
+
+        public static List<State> DecryptBlocksCFB(List<byte[]> blocks, byte[] iv, Key key)
+        {
+            blocks.Insert(0, iv);
+            List<State> blocksStates = blocks.AsParallel()
+                                        .Select(b => new State(b))
+                                        .ToList();
+            // Parallel block encryption enabled by CFB
+            List<State> encrypted = blocksStates.AsParallel()
+                                        .Select(bs => EncryptBlock(bs, key))
+                                        .ToList();
+
+            // Parallel XORing of encrypted blocks and ciphertexts
+            return encrypted
+                    .AsParallel()
+                    .Zip( blocksStates.Skip(1).AsParallel()
+                        , (enc, ciph) =>
+                            {
+                                enc.Xor(ciph);
+                                return enc;
+                            }
+                        )
+                    .ToList();
+        }
 
         public static List<State> EncryptBlocks(List<byte[]> blocks, Key key)
         {
@@ -71,7 +144,6 @@ namespace Aes
         {
             return blocks.Select(b => DecryptBlock(b, key)).ToList();
         }
-
 
         // ============== Single Block Encryption / Decryption =================
 

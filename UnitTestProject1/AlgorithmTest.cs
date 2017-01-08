@@ -113,5 +113,18 @@ namespace UnitTestProject
             Assert.AreEqual(blocks[1][0], 0x22);
             Assert.AreEqual(blocks[1][1], 0x00);
         }
+
+        [TestMethod]
+        public void CFBEncryptsAndDecryptsTest()
+        {
+            string key = "00112233445566778899aabbccddeeff";
+            string iv = "0123456789abcdef0123456789abcdef";
+            string message = "1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm";
+
+            string ciphertext = Algorithm.EncryptMessageCFB(message, iv, key);
+            string plaintext = Algorithm.DecryptMessageCFB(ciphertext, iv, key);
+
+            Assert.AreEqual(message, plaintext);
+        }
     }
 }
